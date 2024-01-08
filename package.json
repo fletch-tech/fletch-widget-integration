@@ -1,0 +1,28 @@
+{
+  "name": "@fletch-tech/widget",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "rollup": "^2.70.0",
+    "rollup-plugin-terser": "^7.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ],
+  "keywords": [
+    "npm",
+    "package",
+    "your-keywords"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "rollup-plugin-html": "^0.2.1"
+  }
+}
