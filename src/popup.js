@@ -1,5 +1,5 @@
 // popup.js
-import { createIframe } from './IframeUtils';
+import { createIframe } from "./IframeUtils";
 
 export const handlePopup = (config) => {
   if (!config.popup) {
@@ -11,11 +11,20 @@ export const handlePopup = (config) => {
   const iframeContainer = document.querySelector("div#iframeContainer");
 
   if (!button && !iframeContainer) {
-    console.error("Error: Button or element with id 'iframeContainer' not found.");
+    // we need either a button or an iframe container
+    // button is used to open the widget in a popup
+    // iframeContainer is used to open the widget in an iframe
+
+    console.error(
+      "Error: Button or element with id 'iframeContainer' not found."
+    );
     return;
   }
 
+  // we can use either a button or an iframe container
   if (button) {
+    // if button is present, we will open the widget in a popup
+
     button.addEventListener("click", () => {
       document.body.classList.add("modal-open");
 
@@ -23,6 +32,10 @@ export const handlePopup = (config) => {
       modalOverlay.className = "modal-overlay";
 
       const popupContainer = document.createElement("div");
+
+      if (!popupContainer) {
+        return;
+      }
       popupContainer.className = "popup-container";
       popupContainer.style.width = config.popupWidth;
       popupContainer.style.height = config.popupHeight;
@@ -42,8 +55,10 @@ export const handlePopup = (config) => {
       modalOverlay.appendChild(popupContainer);
       document.body.appendChild(modalOverlay);
     });
-  } 
-  
+  } else {
+    // else we will open the widget in an iframe
+
     const iframe = createIframe(config);
     iframeContainer.appendChild(iframe);
+  }
 };

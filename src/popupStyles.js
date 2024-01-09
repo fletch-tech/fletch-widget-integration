@@ -1,6 +1,6 @@
 // popupStyles.js
-(function () {
-  var styles = `
+export function addPopupStyles() {
+  const styles = `
       .modal-overlay {
           position: fixed;
           top: 0;
@@ -37,8 +37,7 @@
       }
   `;
 
-  var styleElement = document.createElement("style");
-  styleElement.type = "text/css";
+  const styleElement = document.createElement("style");
   styleElement.appendChild(document.createTextNode(styles));
   document.head.appendChild(styleElement);
-})();
+}
