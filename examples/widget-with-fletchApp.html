@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Iframe Creation</title>
+</head>
+<body>
+
+<div id="iframecontainer"></div>
+
+<script src="/src/fletchApp.js"></script>
+<script>
+  fletchApp.init({
+    src: "https://pethub-wsb.fletch.co",
+    iframeProps: {
+      width: "100%",
+      height: "500px",
+      border: "1",
+      allowfullscreen: true,
+      backgroundColor: "white",
+      scrolling: "yes",
+      style: {
+        backgroundColor: "black",
+      },
+    },
+    queryParams: {
+    widget_type: "Mini",
+    zip_code: "60615",
+    pet_type: "Dog",
+    // ... other query parameters
+  },
+    popup: true,
+    popupProps: {
+        styles: {
+        width: "50%", // Configurable width for the popup container
+        height: "50%", // Configurable height for the popup container
+      },
+      closeButtonStyles: {
+        backgroundColor: "red",
+        color: "white",
+        fontSize: "20px",
+      },
+    },
+    mediaQueries: [
+      {
+        query: "(min-width: 768px) and (max-width: 1023px)",
+        config: {
+          width: "300px",
+          height: "400px",
+          backgroundColor: "red",
+          // Add more styling attributes as needed
+        },
+      },
+      // Add more media queries as needed
+    ],
+  });
+</script>
+
+</body>
+</html>
