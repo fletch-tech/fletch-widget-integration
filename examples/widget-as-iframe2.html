@@ -1,0 +1,21 @@
+<!-- fletch-iframe.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Embed Iframe Example</title>
+    <script src="../dist/main.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <!-- <button id="openIframeContainer">Popup Window</button> -->
+    <div id="iframeContainer"></div>
+    <script>
+      fletchApp.init({
+        src: "https://sniffy-test.fletch.co",
+        iframeProps: {
+          height: "500px",
+        },
+      });
+    </script>
+  </body>
+</html>
