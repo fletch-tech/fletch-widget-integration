@@ -14,6 +14,7 @@ export default {
   plugins: [
     //  See https://github.com/rollup/plugins/tree/master/packages/typescript for config options
     typescript(),
+
     //  See https://github.com/rollup/plugins/tree/master/packages/terser for config options
     terser(),
   ],
