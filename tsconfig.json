@@ -9,10 +9,6 @@
     "moduleDetection": "force",
     "isolatedModules": true,
 
-    /* Emit .d.ts files */
-    "outDir": "dist",
-    "declaration": true,
-
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,

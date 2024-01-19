@@ -1,19 +1,32 @@
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
+import { dts } from "rollup-plugin-dts";
 
-export default {
-  input: "./src/index.ts",
+const config = [
+  {
+    input: "./src/index.ts",
 
-  output: {
-    file: "./dist/main.min.js",
-    name: "fletchApp",
-    format: "iife",
+    output: {
+      file: "./dist/main.min.js",
+      name: "fletchApp",
+      format: "iife",
+    },
+    plugins: [
+      //  See https://github.com/rollup/plugins/tree/master/packages/typescript for config options
+      typescript(),
+
+      //  See https://github.com/rollup/plugins/tree/master/packages/terser for config options
+      terser(),
+    ],
   },
-  plugins: [
-    //  See https://github.com/rollup/plugins/tree/master/packages/typescript for config options
-    typescript(),
+  {
+    input: "./src/index.ts",
+    output: {
+      file: "./dist/index.d.ts",
+      format: "es",
+    },
+    plugins: [dts()],
+  },
+];
 
-    //  See https://github.com/rollup/plugins/tree/master/packages/terser for config options
-    terser(),
-  ],
-};
+export default config;
