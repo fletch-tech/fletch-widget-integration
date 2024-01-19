@@ -1,21 +1,44 @@
 type Options = {
+  /** Partner URL for the iframe */
   src: string;
+  /** Whether to show iframe within a popup (i.e. modal) or directly */
   usePopup: boolean;
+  /**
+   * Whether to synchronize parent window query-params, which can be used
+   * for forwarding query params like `utm_source` to the iframe
+   */
   syncQueryParams: boolean;
+  /** Whether to use mini widget */
   useMiniWidget: boolean;
+  /** Props for the iframe */
   iframeProps: {
+    /** Iframe `width` attribute */
     width: HTMLIFrameElement["width"];
+    /** Iframe `height` attribute */
     height: HTMLIFrameElement["height"];
+    /** Iframe `allowFullscreen` attribute */
     allowFullscreen?: HTMLIFrameElement["allowFullscreen"];
+    /** Iframe `scrolling` attribute */
     scrolling?: HTMLIFrameElement["scrolling"];
+    /** Iframe `style` attribute */
     style?: Partial<HTMLIFrameElement["style"]>;
   };
+  /** Props for the popup. Only relevant if `usePopup` is `true` */
   popupProps: {
+    /** Width of the popup */
     width: HTMLDivElement["style"]["width"];
+    /** Height of the popup */
     height: HTMLDivElement["style"]["height"];
+    /** Styles applied to the popup container element */
     style?: Partial<HTMLDivElement["style"]>;
+    /** Styles applied to the popup close button element */
     closeButtonStyles?: Partial<HTMLButtonElement["style"]>;
   };
+  /**
+   * Query params to be passed to the iframe. This can be used to
+   * set the prefill-data for the widget or pass any extra data to the iframe
+   * like `utm_source` etc.
+   */
   queryParams: {
     [key: string]: string;
   };
@@ -50,6 +73,12 @@ export class FletchApp {
     };
   }
 
+  /**
+   * The main method to initialize the widget.
+   * This renders the widget and sets various properties
+   * based on the options provided
+   * @param options - Options for the widget
+   */
   public init(options: Partial<Options>) {
     this._options = { ...this._options, ...options };
 
@@ -57,6 +86,9 @@ export class FletchApp {
     this._render();
   }
 
+  /**
+   * @internal - Sets the iframe src based on the options provided
+   */
   private _initIframeSrc() {
     const url = new URL(this._options.src);
     const params = new URLSearchParams(url.search);
@@ -84,6 +116,9 @@ export class FletchApp {
     this._iframeSrc = `${url.origin}${url.pathname}?${params.toString()}`;
   }
 
+  /**
+   * @internal - Renders the widget based on the options provided
+   */
   private _render() {
     if (this._options.usePopup) {
       this._renderPopup();
@@ -92,6 +127,9 @@ export class FletchApp {
     }
   }
 
+  /**
+   * @internal - Shows or hides the popup based on the body class
+   */
   private _showOrHidePopup() {
     // check if body contains class `.modal-open`
     const shouldShowPopup = document.body.classList.contains("modal-open");
@@ -108,6 +146,9 @@ export class FletchApp {
     }
   }
 
+  /**
+   * @internal - Renders the popup based on the options provided
+   */
   private _renderPopup() {
     const popupButton = this._checkIfPopupButtonExists();
 
@@ -120,6 +161,9 @@ export class FletchApp {
     });
   }
 
+  /**
+   * @internal - Renders the iframe directly based on the options provided
+   */
   private _renderIframeDirectly() {
     const iframe = this._createIframeElement();
     const iframeContainer = document.querySelector(
@@ -133,6 +177,9 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     iframeContainer.appendChild(iframe);
   }
 
+  /**
+   * @internal - Creates the iframe element based on the options provided
+   */
   private _createIframeElement() {
     const iframe = document.createElement("iframe");
     iframe.src = this._iframeSrc;
@@ -144,6 +191,9 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     return iframe;
   }
 
+  /**
+   * @internal - Creates the popup element based on the options provided
+   */
   private _createPopupElement() {
     const popupFragment = document.createDocumentFragment();
 
@@ -181,6 +231,9 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     return popupFragment;
   }
 
+  /**
+   * @internal - Injects the popup styles in the head. This is required for the popup to work
+   */
   private _injectPopupStylesInHead() {
     const styleElement = document.createElement("style");
     styleElement.textContent = `
@@ -219,6 +272,9 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     document.head.prepend(styleElement);
   }
 
+  /**
+   * @internal - Checks if the popup button exists in the DOM. If not, throws an error with instructions
+   */
   private _checkIfPopupButtonExists() {
     const popupButton = document.querySelector(`button#${this._popupButtonId}`);
     if (!popupButton) {
