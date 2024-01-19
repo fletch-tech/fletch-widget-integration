@@ -2,6 +2,7 @@ type Options = {
   src: string;
   usePopup: boolean;
   syncQueryParams: boolean;
+  useMiniWidget: boolean;
   iframeProps: {
     width: HTMLIFrameElement["width"];
     height: HTMLIFrameElement["height"];
@@ -15,18 +16,23 @@ type Options = {
     style?: Partial<HTMLDivElement["style"]>;
     closeButtonStyles?: Partial<HTMLButtonElement["style"]>;
   };
+  queryParams: {
+    [key: string]: string;
+  };
 };
 
 export class FletchApp {
   private _options: Options;
   private _iframeContainerId = "fletch-iframe" as const;
   private _popupButtonId = "fletch-iframe-trigger" as const;
+  private _iframeSrc = "";
 
   constructor() {
     this._options = {
       src: "",
       usePopup: false,
       syncQueryParams: false,
+      useMiniWidget: false,
       iframeProps: {
         width: "100%",
         height: "100%",
@@ -40,13 +46,42 @@ export class FletchApp {
         style: {},
         closeButtonStyles: {},
       },
+      queryParams: {},
     };
   }
 
   public init(options: Partial<Options>) {
     this._options = { ...this._options, ...options };
 
+    this._initIframeSrc();
     this._render();
+  }
+
+  private _initIframeSrc() {
+    const url = new URL(this._options.src);
+    const params = new URLSearchParams(url.search);
+    const queryParams = new URLSearchParams(this._options.queryParams);
+
+    if (this._options.syncQueryParams) {
+      const parentQueryParams = new URLSearchParams(window.location.search);
+      for (const [key, value] of parentQueryParams.entries()) {
+        params.set(key, value);
+      }
+    }
+
+    // this is below syncQueryParams because we want to override parent query params
+    // with the ones provided in options
+    for (const [key, value] of queryParams.entries()) {
+      params.set(key, value);
+    }
+
+    if (this._options.useMiniWidget) {
+      params.set("widget_type", "Mini");
+    } else {
+      params.delete("widget_type");
+    }
+
+    this._iframeSrc = `${url.origin}${url.pathname}?${params.toString()}`;
   }
 
   private _render() {
@@ -67,7 +102,7 @@ export class FletchApp {
     } else {
       const modalOverlay = document.querySelector(".modal-overlay");
       if (!modalOverlay) {
-        throw new Error(".modal-overlay not found");
+        throw new Error("`.modal-overlay` not found");
       }
       document.body.removeChild(modalOverlay);
     }
@@ -100,7 +135,7 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
 
   private _createIframeElement() {
     const iframe = document.createElement("iframe");
-    iframe.src = this._options.src;
+    iframe.src = this._iframeSrc;
     iframe.width = this._options.iframeProps.width;
     iframe.height = this._options.iframeProps.height;
     iframe.allowFullscreen = this._options.iframeProps.allowFullscreen ?? false;
