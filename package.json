@@ -5,7 +5,7 @@
   "browser": "dist/main.min.js",
   "license": "GPL-3.0-only",
   "scripts": {
-    "dev": "rollup --watch --config rollup.config.dev.mjs",
+    "dev": "rimraf ./dist && rollup --watch --config rollup.config.dev.mjs",
     "build": "rimraf ./dist && rollup --config rollup.config.build.mjs",
     "changeset": "changeset",
     "changeset:version": "changeset version",

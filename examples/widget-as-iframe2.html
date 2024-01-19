@@ -7,12 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <!-- <button id="openIframeContainer">Popup Window</button> -->
-    <div id="iframeContainer"></div>
+    <button id="fletch-iframe-trigger">click me</button>
+    <!-- <div id="fletch-iframe"></div> -->
     <script>
       fletchApp.init({
         src: "https://sniffy-test.fletch.co",
+        usePopup: true,
         iframeProps: {
+          height: "100%",
+          width: "100%",
+        },
+        popupProps: {
+          width: "500px",
           height: "500px",
         },
       });
