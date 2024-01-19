@@ -1,3 +1,10 @@
+type MediaQueryConfig = {
+  /** Media query string to be used */
+  query: string;
+  /** Styles to be applied for matching query */
+  style: HTMLElement["style"];
+};
+
 type Options = {
   /** Partner URL for the iframe */
   src: string;
@@ -42,6 +49,12 @@ type Options = {
   queryParams: {
     [key: string]: string;
   };
+  /**
+   * Apply different styles based on media queries. Primarily, can be used to having
+   * different container sizes for different screen sizes, but other style properties can
+   * also be changed.
+   */
+  mediaQueries: Array<MediaQueryConfig>;
 };
 
 export class FletchApp {
@@ -49,6 +62,9 @@ export class FletchApp {
   private _iframeContainerId = "fletch-iframe" as const;
   private _popupButtonId = "fletch-iframe-trigger" as const;
   private _iframeSrc = "";
+  private _mediaQueries: Array<MediaQueryConfig> = [];
+  private _iframeInitStyles: Partial<HTMLIFrameElement["style"]> = {};
+  private _iframeElementClassName = "css-fletch-iframe";
 
   constructor() {
     this._options = {
@@ -70,6 +86,7 @@ export class FletchApp {
         closeButtonStyles: {},
       },
       queryParams: {},
+      mediaQueries: [],
     };
   }
 
@@ -81,6 +98,7 @@ export class FletchApp {
    */
   public init(options: Partial<Options>) {
     this._options = { ...this._options, ...options };
+    this._mediaQueries = this._options.mediaQueries ?? [];
 
     this._initIframeSrc();
     this._render();
@@ -174,6 +192,9 @@ export class FletchApp {
 If you want to use iframe directly, please add a div with id \`${this._iframeContainerId}\` to your page.`;
       throw new Error(errorMessage);
     }
+
+    this._addMediaQueriesRules(iframe);
+
     iframeContainer.appendChild(iframe);
   }
 
@@ -187,7 +208,30 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     iframe.height = this._options.iframeProps.height;
     iframe.allowFullscreen = this._options.iframeProps.allowFullscreen ?? false;
     iframe.scrolling = this._options.iframeProps.scrolling ?? "no";
-    Object.assign(iframe.style, this._options.iframeProps.style);
+    this._iframeInitStyles = {
+      width: iframe.width,
+      height: iframe.height,
+      ...this._options.iframeProps.style,
+    };
+
+    // we are translating the iframe styles to cssText because
+    // we want to apply media-queries to the iframe
+    // and having inline styles will override the media-queries
+
+    const iframeStyleCssText = this._getStyleCSSText({
+      ...iframe.style,
+      ...this._iframeInitStyles,
+    });
+
+    const styleElement = document.createElement("style");
+    styleElement.textContent = `
+      .${this._iframeElementClassName} {
+        ${iframeStyleCssText}
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    iframe.classList.add(this._iframeElementClassName);
     return iframe;
   }
 
@@ -285,5 +329,43 @@ Alternatively, you can set \`usePopup\` to false in the options.`;
     }
 
     return popupButton;
+  }
+
+  /**
+   * Applies media queries rules to the iframe as css class
+   * @param element - IFrame Element to which media queries rules will be added
+   */
+  private _addMediaQueriesRules<T extends HTMLElement>(element: T) {
+    // parse media queries and add them to the iframe as css class
+    const mediaQueryRules = this._mediaQueries.map((mediaQuery) => {
+      const { query, style } = mediaQuery;
+
+      const cssText = this._getStyleCSSText(style);
+
+      console.log("css text", cssText);
+
+      element.classList.add(this._iframeElementClassName);
+
+      return `@media ${query} { .${this._iframeElementClassName} { ${cssText} } }`;
+    });
+
+    const styleElement = document.createElement("style");
+    styleElement.textContent = mediaQueryRules.join("\n");
+
+    document.head.appendChild(styleElement);
+  }
+
+  /**
+   * @internal - Returns the cssText for the style object
+   * Uses a temporary element to convert the style object to cssText
+   * While this is not the most efficient way, it is the most reliable way
+   */
+  private _getStyleCSSText(style: Partial<CSSStyleDeclaration>) {
+    // construct a temporary element to get the cssText
+    const spanElement = document.createElement("span");
+    Object.assign(spanElement.style, style);
+    const cssText = spanElement.style.cssText;
+
+    return cssText;
   }
 }
