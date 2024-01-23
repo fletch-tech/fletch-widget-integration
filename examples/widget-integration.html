@@ -3,28 +3,27 @@
 <html>
   <head>
     <title>Embed Iframe Example</title>
-    <script defer src="../dist/main.min.js"></script>
+    <script src="../dist/main.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <!-- <button id="openIframeContainer">Popup Window</button> -->
-    <div id="iframeContainer"></div>
+    <!-- <button id="fletch-iframe-trigger">click me</button> -->
+    <div id="fletch-iframe"></div>
     <script>
-      // Define the fletchApp configuration object with additional attributes
-      var fletchApp = {
-        src: "https://pethub-wsb.fletch.co",
-        width: "100%",
-        height: "500px",
-        border: "1",
-        allowfullscreen: true,
-        scrolling: "yes",
-        backgroundColor: "white",
-        style: {
-          backgroundColor: "black",
-          // height:"150px"
+      fletchApp.init({
+        src: "https://sritest-wsb.fletch.co",
+        usePopup: false,
+        useMiniWidget: true,
+        syncQueryParams: false,
+        iframeProps: {
+          height: "500px",
+          width: "100%",
+        },
+        popupProps: {
+          width: "500px",
+          height: "500px",
         },
         queryParams: {
-          widget_type: "Mini",
           zip_code: "60615",
           pet_type: "Dog",
           pet_name: "Max",
@@ -33,7 +32,7 @@
           owner_fname: "Fletchtestone",
           owner_lname: "Fletchtesttwo",
           owner_phone: "9999999999",
-          owner_email: "Fletchtestone@gmail1.com",
+          owner_email: "Fletchtestone+123@gmail1.com",
           pet_age: "24",
           utm_source: "betterpet",
           utm_medium: "organic",
@@ -45,19 +44,21 @@
         },
         mediaQueries: [
           {
-            query: "(min-width: 768px) and (max-width: 1023px)",
-            config: {
-              width: "300px",
+            query: "(max-width: 768px)",
+            style: {
+              width: "500px",
+              height: "700px",
+            },
+          },
+          {
+            query: "(max-width: 500px)",
+            style: {
+              width: "400px",
               height: "400px",
-              backgroundColor: "red",
-              // Add more styling attributes as needed
             },
           },
         ],
-        popup: true,
-        popupWidth: "100%",
-        popupHeight: "500px",
-      };
+      });
     </script>
   </body>
 </html>
