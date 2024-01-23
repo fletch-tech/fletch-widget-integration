@@ -1,6 +1,6 @@
 {
   "name": "@fletch-tech/widget",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Package for facilitating easy integration of Fletch widget into your website",
   "browser": "dist/main.min.js",
   "license": "GPL-3.0-only",
@@ -27,7 +27,8 @@
   },
   "files": [
     "dist/**/*",
-    "src/**/*"
+    "src/**/*",
+    "examples/**/*"
   ],
   "keywords": [
     "fletch",
