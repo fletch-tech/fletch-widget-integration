@@ -1,5 +1,12 @@
 # @fletch-tech/widget
 
+## 0.2.2
+
+### Patch Changes
+
+- 68d1a6c: fixed the css shorthand not working issue
+- 1fc6593: Add default iframe styles
+
 ## 0.2.0
 
 ### Minor Changes
