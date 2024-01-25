@@ -65,6 +65,31 @@ export class FletchApp {
   private _mediaQueries: Array<MediaQueryConfig> = [];
   private _iframeInitStyles: Partial<HTMLIFrameElement["style"]> = {};
   private _iframeElementClassName = "css-fletch-iframe";
+  private _iframeDefaultStyles: Partial<CSSStyleDeclaration> = {
+    borderRadius: "10px",
+    borderWidth: "4px",
+    backgroundImage:
+      "linear-gradient(to top, rgb(0, 142, 221), rgb(162, 207, 66))",
+    borderTopWidth: "10px",
+    borderRightWidth: "10px",
+    borderBottomWidth: "10px",
+    borderLeftWidth: "10px",
+    borderTopStyle: "solid",
+    borderRightStyle: "solid",
+    borderBottomStyle: "solid",
+    borderLeftStyle: "solid",
+    borderTopColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "transparent",
+    borderLeftColor: "transparent",
+    borderImageSource:
+      "none" /* Set to none to clear any existing border image */,
+    borderImageSlice: "1",
+    borderImageWidth: "1",
+    borderImageOutset: "0",
+    backgroundOrigin: "border-box",
+    backgroundClip: "border-box",
+  };
 
   constructor() {
     this._options = {
@@ -208,9 +233,12 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     iframe.height = this._options.iframeProps.height;
     iframe.allowFullscreen = this._options.iframeProps.allowFullscreen ?? false;
     iframe.scrolling = this._options.iframeProps.scrolling ?? "no";
+
+    // Merge default styles with provided styles
     this._iframeInitStyles = {
       width: iframe.width,
       height: iframe.height,
+      ...this._iframeDefaultStyles,
       ...this._options.iframeProps.style,
     };
 
@@ -289,7 +317,7 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -298,18 +326,19 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     .popup-container {
       background: #fff;
       padding: 0px;
-      border-radius: 8px;
+      border-radius: 25px;
       position: relative;
-      overflow: hidden;
+      overflow: unset
     }
 
     .close-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
       cursor: pointer;
-      font-size: 18px;
-      color: #333;
+      position:absolute;
+           top:-30px;
+           right:-10px;
+           color:#fff;
+           background:transparent;
+           border-color:transparent
     }
   `;
 
