@@ -202,17 +202,47 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
    * @internal - Creates the iframe element based on the options provided
    */
   private _createIframeElement() {
+
+    // Default styles
+    const defaultStyles: Partial<CSSStyleDeclaration> = {
+            'border-radius': '10px',
+            'border-width': '4px',
+            'background-image': 'linear-gradient(to top, rgb(0, 142, 221), rgb(162, 207, 66))',
+            'border-top-width': '10px',
+            'border-right-width': '10px',
+            'border-bottom-width': '10px',
+            'border-left-width': '10px',
+            'border-top-style': 'solid',
+            'border-right-style': 'solid',
+            'border-bottom-style': 'solid',
+            'border-left-style': 'solid',
+            'border-top-color': 'transparent',
+            'border-right-color': 'transparent',
+            'border-bottom-color': 'transparent',
+            'border-left-color': 'transparent',
+            'border-image-source': 'none', /* Set to none to clear any existing border image */
+            'border-image-slice': '1',
+            'border-image-width': '1',
+            'border-image-outset': '0',
+            'background-origin': 'border-box',
+             'background-clip': 'border-box'
+    }as Partial<CSSStyleDeclaration>;
+
     const iframe = document.createElement("iframe");
-    iframe.src = this._iframeSrc;
-    iframe.width = this._options.iframeProps.width;
-    iframe.height = this._options.iframeProps.height;
-    iframe.allowFullscreen = this._options.iframeProps.allowFullscreen ?? false;
-    iframe.scrolling = this._options.iframeProps.scrolling ?? "no";
-    this._iframeInitStyles = {
-      width: iframe.width,
-      height: iframe.height,
-      ...this._options.iframeProps.style,
-    };
+  iframe.src = this._iframeSrc;
+  iframe.width = this._options.iframeProps.width;
+  iframe.height = this._options.iframeProps.height;
+  iframe.allowFullscreen = this._options.iframeProps.allowFullscreen ?? false;
+  iframe.scrolling = this._options.iframeProps.scrolling ?? "no";
+
+
+    // Merge default styles with provided styles
+  this._iframeInitStyles = {
+    width: iframe.width,
+    height: iframe.height,
+    ...defaultStyles,
+    ...this._options.iframeProps.style,
+  };
 
     // we are translating the iframe styles to cssText because
     // we want to apply media-queries to the iframe
@@ -232,7 +262,7 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     document.head.appendChild(styleElement);
 
     iframe.classList.add(this._iframeElementClassName);
-    return iframe;
+  return iframe;
   }
 
   /**
@@ -289,7 +319,7 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -298,18 +328,19 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     .popup-container {
       background: #fff;
       padding: 0px;
-      border-radius: 8px;
+      border-radius: 25px;
       position: relative;
-      overflow: hidden;
+      overflow: unset
     }
 
     .close-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
       cursor: pointer;
-      font-size: 18px;
-      color: #333;
+      position:absolute;
+           top:-30px;
+           right:-10px;
+           color:#fff;
+           background:transparent;
+           border-color:transparent
     }
   `;
 
