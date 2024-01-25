@@ -1,0 +1,10 @@
+# Ignore artifacts:
+dist
+coverage
+
+# Ignore node_modules:
+node_modules
+
+# Ignore other files:
+.changeset
+.github

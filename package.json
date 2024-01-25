@@ -9,13 +9,20 @@
     "build": "rimraf ./dist && rollup --config rollup.config.build.mjs",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "changeset:release": "npm run build && changeset publish"
+    "changeset:release": "npm run build && changeset publish",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   },
   "devDependencies": {
     "@changesets/changelog-github": "0.5.0",
     "@changesets/cli": "2.27.1",
     "@rollup/plugin-terser": "0.4.4",
     "@rollup/plugin-typescript": "11.1.6",
+    "@typescript-eslint/eslint-plugin": "6.19.1",
+    "@typescript-eslint/parser": "6.19.1",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "prettier": "3.2.4",
     "rimraf": "5.0.5",
     "rollup": "4.9.4",
     "rollup-plugin-dts": "6.1.0",

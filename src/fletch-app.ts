@@ -66,12 +66,12 @@ export class FletchApp {
   private _iframeInitStyles: Partial<HTMLIFrameElement["style"]> = {};
   private _iframeElementClassName = "css-fletch-iframe";
   private _iframeDefaultStyles: Partial<CSSStyleDeclaration> = {
-    border: '10px solid transparent',
+    border: "10px solid transparent",
     borderRadius: "10px",
     borderWidth: "4px",
     backgroundImage:
       "linear-gradient(to top, rgb(0, 142, 221), rgb(162, 207, 66))",
-      borderBottom:"10%"
+    borderBottom: "10%",
   };
 
   constructor() {
@@ -334,7 +334,7 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
   private _checkIfPopupButtonExists() {
     const popupButton = document.querySelector(`button#${this._popupButtonId}`);
     if (!popupButton) {
-      const errorMessage = `button with id \'${this._popupButtonId}\' not found.
+      const errorMessage = `button with id \`${this._popupButtonId}\` not found.
 If you want to use popup, please add a button with id \`${this._popupButtonId}\` to your page.
 Alternatively, you can set \`usePopup\` to false in the options.`;
       throw new Error(errorMessage);
@@ -374,16 +374,15 @@ Alternatively, you can set \`usePopup\` to false in the options.`;
    */
   private _getStyleCSSText(style: Partial<CSSStyleDeclaration>) {
     const cssText = Object.entries(style)
-        .map(([property, value]) => `${property.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)}: ${value};`)
-        .join(' ');
+      .map(
+        ([property, value]) =>
+          `${property.replace(
+            /[A-Z]/g,
+            (m) => `-${m.toLowerCase()}`
+          )}: ${value};`
+      )
+      .join(" ");
 
     return cssText;
-}
-
-
-
-
-
-
-
+  }
 }
