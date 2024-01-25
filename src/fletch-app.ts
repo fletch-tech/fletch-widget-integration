@@ -66,29 +66,12 @@ export class FletchApp {
   private _iframeInitStyles: Partial<HTMLIFrameElement["style"]> = {};
   private _iframeElementClassName = "css-fletch-iframe";
   private _iframeDefaultStyles: Partial<CSSStyleDeclaration> = {
+    border: '10px solid transparent',
     borderRadius: "10px",
     borderWidth: "4px",
     backgroundImage:
       "linear-gradient(to top, rgb(0, 142, 221), rgb(162, 207, 66))",
-    borderTopWidth: "10px",
-    borderRightWidth: "10px",
-    borderBottomWidth: "10px",
-    borderLeftWidth: "10px",
-    borderTopStyle: "solid",
-    borderRightStyle: "solid",
-    borderBottomStyle: "solid",
-    borderLeftStyle: "solid",
-    borderTopColor: "transparent",
-    borderRightColor: "transparent",
-    borderBottomColor: "transparent",
-    borderLeftColor: "transparent",
-    borderImageSource:
-      "none" /* Set to none to clear any existing border image */,
-    borderImageSlice: "1",
-    borderImageWidth: "1",
-    borderImageOutset: "0",
-    backgroundOrigin: "border-box",
-    backgroundClip: "border-box",
+      borderBottom:"10%"
   };
 
   constructor() {
@@ -390,11 +373,17 @@ Alternatively, you can set \`usePopup\` to false in the options.`;
    * While this is not the most efficient way, it is the most reliable way
    */
   private _getStyleCSSText(style: Partial<CSSStyleDeclaration>) {
-    // construct a temporary element to get the cssText
-    const spanElement = document.createElement("span");
-    Object.assign(spanElement.style, style);
-    const cssText = spanElement.style.cssText;
+    const cssText = Object.entries(style)
+        .map(([property, value]) => `${property.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)}: ${value};`)
+        .join(' ');
 
     return cssText;
-  }
+}
+
+
+
+
+
+
+
 }
