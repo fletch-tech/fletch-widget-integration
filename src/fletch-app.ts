@@ -65,6 +65,31 @@ export class FletchApp {
   private _mediaQueries: Array<MediaQueryConfig> = [];
   private _iframeInitStyles: Partial<HTMLIFrameElement["style"]> = {};
   private _iframeElementClassName = "css-fletch-iframe";
+  private _iframeDefaultStyles: Partial<CSSStyleDeclaration> = {
+    borderRadius: "10px",
+    borderWidth: "4px",
+    backgroundImage:
+      "linear-gradient(to top, rgb(0, 142, 221), rgb(162, 207, 66))",
+    borderTopWidth: "10px",
+    borderRightWidth: "10px",
+    borderBottomWidth: "10px",
+    borderLeftWidth: "10px",
+    borderTopStyle: "solid",
+    borderRightStyle: "solid",
+    borderBottomStyle: "solid",
+    borderLeftStyle: "solid",
+    borderTopColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "transparent",
+    borderLeftColor: "transparent",
+    borderImageSource:
+      "none" /* Set to none to clear any existing border image */,
+    borderImageSlice: "1",
+    borderImageWidth: "1",
+    borderImageOutset: "0",
+    backgroundOrigin: "border-box",
+    backgroundClip: "border-box",
+  };
 
   constructor() {
     this._options = {
@@ -202,47 +227,20 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
    * @internal - Creates the iframe element based on the options provided
    */
   private _createIframeElement() {
-
-    // Default styles
-    const defaultStyles: Partial<CSSStyleDeclaration> = {
-            'border-radius': '10px',
-            'border-width': '4px',
-            'background-image': 'linear-gradient(to top, rgb(0, 142, 221), rgb(162, 207, 66))',
-            'border-top-width': '10px',
-            'border-right-width': '10px',
-            'border-bottom-width': '10px',
-            'border-left-width': '10px',
-            'border-top-style': 'solid',
-            'border-right-style': 'solid',
-            'border-bottom-style': 'solid',
-            'border-left-style': 'solid',
-            'border-top-color': 'transparent',
-            'border-right-color': 'transparent',
-            'border-bottom-color': 'transparent',
-            'border-left-color': 'transparent',
-            'border-image-source': 'none', /* Set to none to clear any existing border image */
-            'border-image-slice': '1',
-            'border-image-width': '1',
-            'border-image-outset': '0',
-            'background-origin': 'border-box',
-             'background-clip': 'border-box'
-    }as Partial<CSSStyleDeclaration>;
-
     const iframe = document.createElement("iframe");
-  iframe.src = this._iframeSrc;
-  iframe.width = this._options.iframeProps.width;
-  iframe.height = this._options.iframeProps.height;
-  iframe.allowFullscreen = this._options.iframeProps.allowFullscreen ?? false;
-  iframe.scrolling = this._options.iframeProps.scrolling ?? "no";
-
+    iframe.src = this._iframeSrc;
+    iframe.width = this._options.iframeProps.width;
+    iframe.height = this._options.iframeProps.height;
+    iframe.allowFullscreen = this._options.iframeProps.allowFullscreen ?? false;
+    iframe.scrolling = this._options.iframeProps.scrolling ?? "no";
 
     // Merge default styles with provided styles
-  this._iframeInitStyles = {
-    width: iframe.width,
-    height: iframe.height,
-    ...defaultStyles,
-    ...this._options.iframeProps.style,
-  };
+    this._iframeInitStyles = {
+      width: iframe.width,
+      height: iframe.height,
+      ...this._iframeDefaultStyles,
+      ...this._options.iframeProps.style,
+    };
 
     // we are translating the iframe styles to cssText because
     // we want to apply media-queries to the iframe
@@ -262,7 +260,7 @@ If you want to use iframe directly, please add a div with id \`${this._iframeCon
     document.head.appendChild(styleElement);
 
     iframe.classList.add(this._iframeElementClassName);
-  return iframe;
+    return iframe;
   }
 
   /**
